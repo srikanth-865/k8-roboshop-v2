@@ -54,7 +54,7 @@ spec:
         image: srikanth865/mysql:v1
         envFrom:
          - secretRef:
-           name: mysql
+            name: mysql
         volumeMounts:
         - name: www
           mountPath: /var/lib/mysql
