@@ -9,8 +9,9 @@ metadata:
     tier: db
 spec:
   ports:
-  - port:  
-    name: redis
+   - protocol: TCP
+     port: 6379 # service port
+     targetPort: 6379 # container port
   clusterIP: None # headless service
   selector:
     app: redis
