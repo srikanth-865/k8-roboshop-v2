@@ -96,10 +96,11 @@ spec:
    containers:
      - name: frontend
        image: srikanth865/frontend:v1
-       requests:
+       resources:
+        requests:
             cpu: "100m"
             memory: "128Mi"
-       limits:
+        limits:
             cpu: "100m"
             memory: "128Mi"
        ##volume mount should be inside of container level we are using those volume
