@@ -96,6 +96,12 @@ spec:
    containers:
      - name: frontend
        image: srikanth865/frontend:v1
+       requests:
+            cpu: "100m"
+            memory: "128Mi"
+       limits:
+            cpu: "100m"
+            memory: "128Mi"
        ##volume mount should be inside of container level we are using those volume
        volumeMounts:
         - name: nginx-config

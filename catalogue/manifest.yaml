@@ -37,6 +37,14 @@ spec:
    containers:
      - name: catalogue
        image: srikanth865/catalogue:v1
+       resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            requests:
+            cpu: "100m"
+            memory: "128Mi"
        envFrom:
         - configMapRef:
            name: catalogue
