@@ -13,7 +13,9 @@ spec:
     name: mongodb
   clusterIP: None # headless service
   selector:
-    app: mongodb
+      project: roboshop
+      component: mongodb
+      tier: db 
 ---
 apiVersion: apps/v1
 kind: StatefulSet
