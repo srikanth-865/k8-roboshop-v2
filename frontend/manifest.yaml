@@ -145,6 +145,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: frontend
+  namespace: roboshop
   labels:
     project: roboshop
     tier: frontend

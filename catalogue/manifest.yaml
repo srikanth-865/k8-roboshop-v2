@@ -38,13 +38,12 @@ spec:
      - name: catalogue
        image: srikanth865/catalogue:v1
        resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            requests:
-            cpu: "100m"
-            memory: "128Mi"
+        requests:
+          cpu: "100m"
+          memory: "128Mi"
+        limits:
+          cpu: "100m"
+          memory: "128Mi"
        envFrom:
         - configMapRef:
            name: catalogue
@@ -76,6 +75,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: catalogue
+  namespace: roboshop
   labels:
     project: roboshop
     tier: backend
