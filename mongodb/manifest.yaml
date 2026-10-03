@@ -26,7 +26,7 @@ spec:
       project: roboshop
       component: mongodb
       tier: db                # has to match .spec.template.metadata.labels
-  serviceName: "nginx"
+  serviceName: "mongodb-headless"
   replicas: 1  
   template:
     metadata:
