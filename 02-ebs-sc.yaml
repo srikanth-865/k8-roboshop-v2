@@ -1,0 +1,9 @@
+#for dynamic storage class
+apiVersion: storage.k8s.io/v1   
+kind: StorageClass  #for dynamic way we use this storage class here and then using on ebs-dynamic file pod storage its an admin activity
+metadata:
+  name: roboshop-ebs
+provisioner: ebs.csi.aws.com #it will connect to AWS console to perform operations
+reclaimPolicy: Retain #means delete will still there in volume even pod delete by default k8 is delete policy we put as retain
+volumeBindingMode: WaitForFirstConsumer
+
