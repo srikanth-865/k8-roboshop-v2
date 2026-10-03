@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: catalogue
+  namespace: roboshop
+data:
+  MONGO: "true"
+  MONGO_URL: "mongodb://mongodb:27017/catalogue"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue
+  namespace: roboshop
+   # labels related to deployment resource just for reference
+  labels:
+    project: roboshop
+    tier: backend
+    component: catalogue
+spec:
+ replicas: 1  #how many Pods you want
+ selector: #  which Pods the Deployment manages
+    matchLabels:  #matchLabels is inside of selector because it contains the labels used to identify those Pods.
+    #this labels is match the pod containers
+        project: roboshop
+        tier: backend
+        component: catalogue
+##its a pod defination
+ template:
+  metadata:
+    labels:
+       project: roboshop
+       tier: backend
+       component: catalogue
+  spec:
+   containers:
+     - name: catalogue
+       image: srikanth865/catalogue:v1
+       envFrom:
+        - configMapRef:
+           name: catalogue
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: catalogue
+ namespace: roboshop
+ # servicer labels  resource just for reference
+ labels:
+    project: roboshop
+    tier: backend
+    component: catalogue
+spec:
+ selector:
+ #this selector  service labels going to match the catalogue pod labels
+    project: roboshop
+    tier: backend
+    component: catalogue
+
+ ports:  #ports expects a list, so we gik=ve like this - 
+  - protocol: TCP
+    port: 8080 #serviceport
+    targetPort: 8080  #container port
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: catalogue
+  labels:
+    project: roboshop
+    tier: backend
+    component: catalogue
+spec:
+  # deployment reference
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: catalogue
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
