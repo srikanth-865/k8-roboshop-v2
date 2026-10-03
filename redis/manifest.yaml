@@ -14,7 +14,9 @@ spec:
      targetPort: 6379 # container port
   clusterIP: None # headless service
   selector:
-    app: redis
+      project: roboshop
+      component: redis
+      tier: db     
 ---
 apiVersion: apps/v1
 kind: StatefulSet

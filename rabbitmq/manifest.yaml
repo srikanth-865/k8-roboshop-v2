@@ -1,65 +1,49 @@
 apiVersion: v1
-kind: Secret
-metadata:
- name: mysql
- namespace: roboshop
- labels:
-    project: roboshop
-    tier: db
-    component: mysql
-type: Opaque
-stringData:
-  MYSQL_ROOT_PASSWORD: "RoboShop@1"
----
-apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: rabbitmq
   namespace: roboshop
   labels:
     project: roboshop
-    component: mysql
+    component: rabbitmq
     tier: db
 spec:
   ports:
    - protocol: TCP
-     port: 3306 # service port
-     targetPort: 3306 # container port
+     port: 5672 # service port
+     targetPort: 5672 # container port
   clusterIP: None # headless service
   selector:
       project: roboshop
-      component: mysql
+      component: rabbitmq
       tier: db    
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql
+  name: rabbitmq
   namespace: roboshop
 spec:
   selector:
     matchLabels:
       project: roboshop
-      component: mysql
+      component: rabbitmq
       tier: db                # has to match .spec.template.metadata.labels
-  serviceName: "mysql-headless"
+  serviceName: "rabbitmq-headless"
   replicas: 1  
   template:
     metadata:
       labels:
         project: roboshop
-        component: mysql
+        component: rabbitmq
         tier: db              #has to match .spec.selector.matchLabels
     spec:
       containers:
-      - name: mysql
-        image: srikanth865/mysql:v1
-        envFrom:
-         - secretRef:
-            name: mysql
+      - name: rabbitmq
+        image: rabbitmq:3
         volumeMounts:
         - name: www
-          mountPath: /var/lib/mysql
+          mountPath: /var/lib/rabbitmq
   # PVC
   volumeClaimTemplates:
   - metadata:
