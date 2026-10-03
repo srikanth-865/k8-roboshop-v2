@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  labels:
+    project: roboshop
+    component: mongodb
+    tier: db
+spec:
+  ports:
+  - port: 27017
+    name: mongodb
+  clusterIP: None # headless service
+  selector:
+    app: mongodb
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+spec:
+  selector:
+    matchLabels:
+      project: roboshop
+      component: mongodb
+      tier: db                # has to match .spec.template.metadata.labels
+  serviceName: "nginx"
+  replicas: 1  
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        component: mongodb
+        tier: db              #has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: mongodb
+        image: srikanth865/mongodb:v1
+        volumeMounts:
+        - name: www
+          mountPath: /data/db
+  # PVC
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "roboshop-ebs"
+      resources:
+        requests:
+          storage: 1Gi
+          
